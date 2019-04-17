@@ -1,14 +1,25 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
+import styled from 'styled-components';
 
-import '../styles/App.css';
+import '../styles/App.scss';
+
+const Wrapper = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+`;
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <h1>BATTLESHIP HERE!</h1>
-      </div>
+      <Wrapper>
+        <form>
+          <input placeholder='Write your name...'/>
+          <button>next</button>
+        </form>
+      </Wrapper>
     );
   }
 }
