@@ -17,10 +17,17 @@ class GameMode extends React.Component {
     this.props.history.push('/');
   };
 
+  knownPlayerHandler = e => {
+    e.preventDefault();
+    this.props.history.push('/battle');
+  };
+
   render() {
     return (
       <Wrapper>
-        <Button>Game with known player</Button>
+        <Button onClick={this.knownPlayerHandler}>
+          Game with known player
+        </Button>
         <Button>Game with random player</Button>
         <Button onClick={this.backHandler} primary>
           Back
