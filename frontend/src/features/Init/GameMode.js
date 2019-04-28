@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import { Button } from '../../components/Button';
 
 const Wrapper = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
   justify-content: center;
+  align-content: center;
+  grid-row-gap: 20px;
   height: 100vh;
 `;
 
