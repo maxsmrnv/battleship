@@ -7,6 +7,8 @@ import InitPlayer from './Init/InitPlayer';
 import GameMode from './Init/GameMode';
 import Battle from './Battle/Battle';
 
+import './App.css'
+
 class App extends Component {
   render() {
     return (

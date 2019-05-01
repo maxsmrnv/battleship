@@ -8,11 +8,11 @@ import Message from './Message';
 
 const StyledChat = styled.div`
   display: grid;
-  grid-template-rows: 50vh auto;
-  grid-row-gap: 10px;
+  grid-template-rows: minmax(100px, 300px) 100px;
 `;
 
 const ScrollableMessages = styled.div`
+  padding: 5px;
   grid-row-gap: 5px;
   display: grid;
   align-content: start;
