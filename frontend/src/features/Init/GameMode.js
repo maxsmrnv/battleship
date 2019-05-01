@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { inject, observer } from 'mobx-react';
 
 import { Button } from '../../components/Button';
 
@@ -11,15 +12,19 @@ const Wrapper = styled.section`
   height: 100vh;
 `;
 
+@observer
+@inject('battleStore', 'playerStore')
 class GameMode extends React.Component {
   backHandler = e => {
     e.preventDefault();
     this.props.history.push('/');
   };
 
-  knownPlayerHandler = e => {
+  knownPlayerHandler = async e => {
     e.preventDefault();
-    this.props.history.push('/battle');
+    const { battleStore, playerStore } = this.props;
+    await battleStore.startBattle(playerStore.name);
+    this.props.history.push('/battle/' + battleStore.battleUUID);
   };
 
   render() {

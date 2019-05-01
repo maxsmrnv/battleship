@@ -13,9 +13,8 @@ const Wrapper = styled.section`
   .battle {
     grid-area: battle;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: center;
-    align-items: start;
+    grid-template-columns: auto auto;
+    justify-content: space-evenly;
   }
   .chat {
     border-top: 1px solid black;
@@ -27,6 +26,7 @@ const Wrapper = styled.section`
     justify-self: end;
     align-self: start;
   }
+
   grid-template-areas:
     'header'
     'battle'

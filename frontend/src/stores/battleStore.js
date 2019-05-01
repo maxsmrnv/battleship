@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import axios from 'axios'
 
 class battleStore {
   @observable battleUUID;
@@ -7,7 +8,7 @@ class battleStore {
     this.isFetching = true;
     this.error = null;
     try {
-      const response = await axios.post('localhost:3001/battle', {
+      const response = await axios.post('http://localhost:3001/battle', {
         name: playerName
       });
       this.battleUUID = response.data.battleUUID;

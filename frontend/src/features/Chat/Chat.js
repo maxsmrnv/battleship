@@ -65,6 +65,7 @@ export default class Chat extends Component {
   buttonIsAvailabel = () => 'disabled';
 
   render() {
+    console.log(window.location.href.split('/')[4]);
     return (
       <StyledChat>
         <ScrollableMessages ref={this.trackerRef}>

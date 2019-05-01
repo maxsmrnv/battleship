@@ -7,8 +7,9 @@ import DevTools from 'mobx-react-devtools';
 
 import playerStore from './stores/playerStore';
 import chatStore from './stores/chatStore';
+import battleStore from './stores/battleStore';
 
-const stores = { playerStore, chatStore };
+const stores = { playerStore, chatStore, battleStore };
 
 ReactDOM.render(
   <Provider {...stores}>
