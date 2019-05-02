@@ -1,11 +1,46 @@
 import { observable, action, computed } from 'mobx';
 
+const URL = 'ws://localhost:1337';
+
 class ChatStore {
-  @observable messages = [
-    { id: 1, name: 'max smirnov', message: 'vsem hi' },
-    { id: 2, name: 'dan abramov', message: 'zdarov, klassno sdelal!' },
-    { id: 2, name: 'kolya evstafev', message: 'кайфовый десигн!' }
-  ];
+  @observable messages = [];
+  @observable ws;
+
+  @action
+  createConnection(user) {
+    this.ws = new WebSocket(URL);
+    this.ws.onopen = () => {
+      // on connecting, do nothing but log it to the console
+      console.log('connected');
+      this.ws.send(user.userName);
+      // this.ws.send(JSON.stringify(user));
+    };
+
+    this.ws.onmessage = evt => {
+      // on receiving a message, add it to the list of messages
+      const message = JSON.parse(evt.data);
+      // this.messages.push(message.data);
+      if (message.type === 'message') {
+        const { data } = message;
+        this.messages.push({
+          name: data.author,
+          message: data.text
+        });
+      }
+      console.log('new msg:', message);
+    };
+
+    this.ws.onclose = () => {
+      console.log('disconnected');
+      this.ws = new WebSocket(URL);
+      // automatically try to reconnect on connection loss
+    };
+  }
+
+  @action
+  sendMessage(message) {
+    this.ws.send(message);
+  }
 }
 
 export default new ChatStore();
