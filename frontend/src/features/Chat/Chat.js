@@ -39,6 +39,12 @@ export default class Chat extends Component {
   inputRef = React.createRef();
   trackerRef = React.createRef();
 
+  componentDidMount() {
+    const { chatStore, playerStore } = this.props;
+    console.log(playerStore.name);
+    chatStore.createConnection({ userName: playerStore.name });
+  }
+
   componentDidUpdate() {
     const { current } = this.trackerRef;
     current.scrollTop = current.scrollHeight;
@@ -48,11 +54,12 @@ export default class Chat extends Component {
     e.preventDefault();
     const { chatStore } = this.props;
     if (this.newMessage.length > 0) {
-      chatStore.messages.push({
-        id: 3,
-        name: this.props.playerStore.name,
-        message: this.newMessage
-      });
+      // chatStore.messages.push({
+      //   id: 3,
+      //   name: this.props.playerStore.name,
+      //   message: this.newMessage
+      // });
+      chatStore.sendMessage(this.newMessage);
       this.newMessage = '';
       this.inputRef.current.focus();
     }

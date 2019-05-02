@@ -66,6 +66,7 @@ wsServer.on('request', function(request) {
   }
   // user sent some message
   connection.on('message', function(message) {
+    console.log(message);
     if (message.type === 'utf8') { // accept only text
     // first message sent by user is their name
      if (userName === false) {
