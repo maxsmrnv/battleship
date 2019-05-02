@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 
-const URL = 'ws://localhost:1337';
+const URL = 'ws://localhost:8080/chat';
 
 class ChatStore {
   @observable messages = [];
@@ -8,7 +8,7 @@ class ChatStore {
 
   @action
   createConnection(user) {
-    this.ws = new WebSocket(URL);
+    this.ws = new WebSocket(URL + `/${user.userName}`);
     this.ws.onopen = () => {
       // on connecting, do nothing but log it to the console
       console.log('connected');
@@ -21,10 +21,9 @@ class ChatStore {
       const message = JSON.parse(evt.data);
       // this.messages.push(message.data);
       if (message.type === 'message') {
-        const { data } = message;
         this.messages.push({
-          name: data.author,
-          message: data.text
+          name: message.author,
+          message: message.text
         });
       }
       console.log('new msg:', message);

@@ -1,5 +1,7 @@
 package com.home;
 
+import org.eclipse.jetty.websocket.jsr356.decoders.StringDecoder;
+
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -11,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @ServerEndpoint(
         value = "/chat/{username}",
-        decoders = MessageDecoder.class,
+        decoders = StringDecoder.class,
         encoders = MessageEncoder.class)
 public class ChatEndpoint {
 
@@ -38,28 +40,31 @@ public class ChatEndpoint {
         users.put(session.getId(), username);
 
         Message message = new Message();
-        message.setFrom(username);
-        message.setContent("Connected!");
+        message.setAuthor(username);
+        message.setText("Connected!");
         broadCast(message);
     }
 
     @OnMessage
-    public void onMessage(Session session, Message message) {
-        message.setFrom(users.get(session.getId()));
+    public void onMessage(Session session, String text) {
+        Message message = new Message();
+        message.setText(text);
+        message.setAuthor(users.get(session.getId()));
         broadCast(message);
     }
 
     @OnClose
     public void onClose(Session session) {
-
+        endpoints.remove(this);
+        Message message = new Message();
+        message.setAuthor(users.get(session.getId()));
+        message.setText("Disconnected!");
+        broadCast(message);
     }
 
     @OnError
-    public void onError(Session session) {
-        endpoints.remove(this);
-        Message message = new Message();
-        message.setFrom(users.get(session.getId()));
-        message.setContent("Disconnected!");
+    public void onError(Session session, Throwable thr) {
+
     }
 
 }
