@@ -54,11 +54,6 @@ export default class Chat extends Component {
     e.preventDefault();
     const { chatStore } = this.props;
     if (this.newMessage.length > 0) {
-      // chatStore.messages.push({
-      //   id: 3,
-      //   name: this.props.playerStore.name,
-      //   message: this.newMessage
-      // });
       chatStore.sendMessage(this.newMessage);
       this.newMessage = '';
       this.inputRef.current.focus();

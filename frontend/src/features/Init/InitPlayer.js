@@ -37,7 +37,7 @@ class InitPlayer extends React.Component {
     e.preventDefault();
     const { history, playerStore } = this.props;
     if (this.playerName.length > 0) {
-      history.push('game');
+      history.push('mode');
       playerStore.setName(this.playerName);
     } else {
       this.nameIsValid = false;

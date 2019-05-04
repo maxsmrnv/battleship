@@ -5,7 +5,7 @@ import { AnimatedSwitch } from 'react-router-transition';
 
 import InitPlayer from './Init/InitPlayer';
 import GameMode from './Init/GameMode';
-import Battle from './Battle/Battle';
+import Game from './Game/Game';
 
 import './App.css';
 
@@ -19,9 +19,9 @@ class App extends Component {
         className='switch-wrapper'
       >
         <Route exact path='/' component={InitPlayer} />
-        <Route path='/game' component={GameMode} />
-        <Route path='/battle' component={Battle} />
-        <Route path='/battle/:battleUUID' component={() => <p>test</p>} />
+        <Route path='/mode' component={GameMode} />
+        <Route path='/game' component={Game} />
+        <Route path='/game/:gameUUID' component={() => <p>test</p>} />
         <Route render={() => <p>Not Found</p>} />
       </AnimatedSwitch>
     );

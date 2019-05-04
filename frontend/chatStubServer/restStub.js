@@ -8,7 +8,7 @@ const requestHandler = (request, response) => {
   response.setHeader('Access-Control-Allow-Methods', '*');
   response.setHeader('Access-Control-Allow-Headers', '*');
   response.writeHead(200, {"Content-Type": "application/json"});
-  response.end(JSON.stringify({ battleUUID: uuidv4() }));
+  response.end(JSON.stringify({ gameUUID: uuidv4() }));
 };
 const server = http.createServer(requestHandler);
 server.listen(port, err => {

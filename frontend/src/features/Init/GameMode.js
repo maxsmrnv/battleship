@@ -24,7 +24,9 @@ class GameMode extends React.Component {
     e.preventDefault();
     const { battleStore, playerStore } = this.props;
     await battleStore.startBattle(playerStore.name);
-    this.props.history.push('/battle/' + battleStore.battleUUID);
+    if (battleStore.gameUUID) {
+      this.props.history.push('/game/' + battleStore.gameUUID);
+    }
   };
 
   render() {

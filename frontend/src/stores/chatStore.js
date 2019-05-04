@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 
-const URL = 'ws://localhost:8080/chat';
+const URL = 'ws://localhost:1337/chat';
 
 class ChatStore {
   @observable messages = [];
@@ -22,8 +22,8 @@ class ChatStore {
       // this.messages.push(message.data);
       if (message.type === 'message') {
         this.messages.push({
-          name: message.author,
-          message: message.text
+          name: message.data.author,
+          message: message.data.text
         });
       }
       console.log('new msg:', message);
