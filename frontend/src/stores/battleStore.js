@@ -12,13 +12,11 @@ class battleStore {
     this.shipsPosition = index;
   }
 
-  @action async startBattle(playerName) {
+  @action async startBattle() {
     this.isFetching = true;
     this.error = null;
     try {
-      const response = await axios.post('http://localhost:3001/game', {
-        name: playerName
-      });
+      const response = await axios.post('http://localhost:8080/game');
       this.gameUUID = response.data.gameUUID;
       this.isFetching = false;
     } catch (error) {

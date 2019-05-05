@@ -13,7 +13,7 @@ const Wrapper = styled.section`
 `;
 
 @observer
-@inject('battleStore', 'playerStore')
+@inject('battleStore')
 class GameMode extends React.Component {
   backHandler = e => {
     e.preventDefault();
@@ -22,8 +22,8 @@ class GameMode extends React.Component {
 
   knownPlayerHandler = async e => {
     e.preventDefault();
-    const { battleStore, playerStore } = this.props;
-    await battleStore.startBattle(playerStore.name);
+    const { battleStore } = this.props;
+    await battleStore.startBattle();
     if (battleStore.gameUUID) {
       this.props.history.push('/game/' + battleStore.gameUUID);
     }

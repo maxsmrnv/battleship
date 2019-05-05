@@ -1,19 +1,19 @@
 import { observable, action, computed } from 'mobx';
 
-const URL = 'ws://localhost:1337/chat';
+const URL = 'ws://localhost:8080/game';
 
 class ChatStore {
   @observable messages = [];
   @observable ws;
 
   @action
-  createConnection(user) {
-    this.ws = new WebSocket(URL + `/${user.userName}`);
+  createConnection(gameUUID, userName) {
+    const webSocketURL = `${URL}?name=${userName}&game=${gameUUID}`;
+
+    this.ws = new WebSocket(webSocketURL);
     this.ws.onopen = () => {
       // on connecting, do nothing but log it to the console
       console.log('connected');
-      this.ws.send(user.userName);
-      // this.ws.send(JSON.stringify(user));
     };
 
     this.ws.onmessage = evt => {
@@ -31,7 +31,7 @@ class ChatStore {
 
     this.ws.onclose = () => {
       console.log('disconnected');
-      this.ws = new WebSocket(URL);
+      this.ws = new WebSocket(webSocketURL);
       // automatically try to reconnect on connection loss
     };
   }

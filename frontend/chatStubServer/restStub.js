@@ -1,7 +1,7 @@
 const http = require('http');
 const uuidv4 = require('uuid/v4');
 
-const port = 3001;
+const port = 8080;
 const requestHandler = (request, response) => {
   response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Access-Control-Request-Method', '*');

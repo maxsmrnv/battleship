@@ -29,7 +29,7 @@ const Form = styled.form`
   }
 `;
 
-@inject('chatStore', 'playerStore')
+@inject('chatStore', 'playerStore', 'battleStore')
 @observer
 export default class Chat extends Component {
   @observable newMessage = '';
@@ -40,9 +40,8 @@ export default class Chat extends Component {
   trackerRef = React.createRef();
 
   componentDidMount() {
-    const { chatStore, playerStore } = this.props;
-    console.log(playerStore.name);
-    chatStore.createConnection({ userName: playerStore.name });
+    const { chatStore, playerStore, battleStore } = this.props;
+    chatStore.createConnection(battleStore.gameUUID, playerStore.name);
   }
 
   componentDidUpdate() {

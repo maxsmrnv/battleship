@@ -74,7 +74,7 @@ class Game extends React.Component {
       pendingForPlayer: <h1>pending for player...</h1>,
       preparation: (
         <>
-          <Board />{' '}
+          <Board />
           <div style={{ display: 'grid', alignContent: 'center' }}>
             <Button primary>Ready</Button>
           </div>
