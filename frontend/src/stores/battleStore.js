@@ -17,7 +17,7 @@ class battleStore {
     this.error = null;
     try {
       const response = await axios.post('http://localhost:8080/game');
-      this.gameUUID = response.data.gameUUID;
+      this.gameUUID = response.data.id;
       this.isFetching = false;
     } catch (error) {
       this.error = error;

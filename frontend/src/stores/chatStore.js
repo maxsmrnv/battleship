@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 
-const URL = 'ws://localhost:8080/game';
+const URL = 'ws://localhost:8080/ws/game';
 
 class ChatStore {
   @observable messages = [];
