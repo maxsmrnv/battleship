@@ -41,7 +41,7 @@ export default class Chat extends Component {
 
   componentDidMount() {
     const { chatStore, playerStore, battleStore } = this.props;
-    console.log('AAAAAAAA', battleStore.gameUUID)
+    console.log('current battleStore.gameUUID is: ', battleStore.gameUUID)
     chatStore.createConnection(battleStore.gameUUID, playerStore.name);
   }
 
@@ -54,8 +54,7 @@ export default class Chat extends Component {
 
     e.preventDefault();
 
-    const { chatStore,battleStore } = this.props;
-    console.log('AAAAAAAA', battleStore.gameUUID)
+    const { chatStore } = this.props;
 
     if (this.newMessage.length > 0) {
       chatStore.sendMessage(this.newMessage);
@@ -71,7 +70,6 @@ export default class Chat extends Component {
   buttonIsAvailabel = () => 'disabled';
 
   render() {
-    console.log(window.location.href.split('/')[4]);
     return (
       <StyledChat>
         <ScrollableMessages ref={this.trackerRef}>
