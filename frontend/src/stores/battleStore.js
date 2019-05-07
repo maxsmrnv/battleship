@@ -13,11 +13,17 @@ class battleStore {
   }
 
   @action async startBattle() {
+    const options = {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' }
+    };
     this.isFetching = true;
     this.error = null;
     try {
-      const response = await axios.post('http://localhost:8080/game');
-      this.gameUUID = response.data.id;
+      const response = await axios.post('http://localhost:8080/game', {
+        headers: { 'Access-Control-Allow-Origin': '*' }
+      });
+      this.gameUUID = response.data.gameUUID;
       this.isFetching = false;
     } catch (error) {
       this.error = error;
@@ -26,3 +32,6 @@ class battleStore {
   }
 }
 export default new battleStore();
+
+
+

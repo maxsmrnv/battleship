@@ -20,8 +20,7 @@ class GameMode extends React.Component {
     this.props.history.push('/');
   };
 
-  knownPlayerHandler = async e => {
-    e.preventDefault();
+  randomPlayerHandler = async e => {
     const { battleStore } = this.props;
     await battleStore.startBattle();
     if (battleStore.gameUUID) {
@@ -29,11 +28,21 @@ class GameMode extends React.Component {
     }
   };
 
+  knownPlayerHandler = async e => {
+    const { battleStore } = this.props;
+    await battleStore.startBattle();
+    if (battleStore.gameUUID) {
+      this.props.history.push('/invite');
+    }
+  };
+
   render() {
     return (
       <Wrapper>
-        <Button disabled>Game with known player</Button>
         <Button onClick={this.knownPlayerHandler}>
+          Game with known player
+        </Button>
+        <Button onClick={this.randomPlayerHandler}>
           Game with random player
         </Button>
         <Button onClick={this.backHandler} primary>
