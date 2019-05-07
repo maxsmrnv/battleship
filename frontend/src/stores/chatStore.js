@@ -20,18 +20,18 @@ class ChatStore {
       // on receiving a message, add it to the list of messages
       const message = JSON.parse(evt.data);
       console.log('message', message)
-      if (message.type === 'message') {
+//      if (message.type === 'message') {
         this.messages.push({
-          name: message.data.author,
-          message: message.data.text
+          name: message.author,
+          message: message.text
         });
-      }
+//      }
       console.log('new msg:', message);
     };
 
     this.ws.onclose = () => {
       console.log('disconnected');
-      this.ws = new WebSocket(webSocketURL);
+//      this.ws = new WebSocket(webSocketURL);
       // automatically try to reconnect on connection loss
     };
   }
