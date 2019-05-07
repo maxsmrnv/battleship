@@ -24,8 +24,11 @@ public class GameSocketHandler extends TextWebSocketHandler {
     private GameManager gameManager;
 
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-
+    protected void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
+        Message message = new Message();
+        message.setText(textMessage.getPayload());
+        message.setAuthor(users.get(session.getId()));
+        broadCast(message);
     }
 
     @Override
@@ -34,7 +37,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
             sessions.add(session);
 
             String userName = session.getAttributes().get("name").toString();
-            users.put(userName, session.getId());
+            users.put(session.getId(), userName);
 
             long game = Long.parseLong(session.getAttributes().get("game").toString());
             gameManager.addPlayerToTheGame(game, session.getId());
