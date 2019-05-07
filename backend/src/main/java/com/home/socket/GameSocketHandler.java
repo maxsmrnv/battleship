@@ -16,23 +16,23 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameSocketHandler extends TextWebSocketHandler {
-    List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
-    Map<String, String> users = new HashMap<>();
-    ObjectMapper mapper = new ObjectMapper();
+    private List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+    private Map<String, String> users = new HashMap<>();
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private GameManager gameManager;
 
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
+    protected void handleTextMessage(WebSocketSession session, TextMessage textMessage) {
         Message message = new Message();
         message.setText(textMessage.getPayload());
         message.setAuthor(users.get(session.getId()));
-        broadCast(message);
+        broadCast(message, session.getId());
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    public void afterConnectionEstablished(WebSocketSession session) {
         if (session.getAttributes().containsKey("name") && session.getAttributes().containsKey("game")) {
             sessions.add(session);
 
@@ -45,24 +45,24 @@ public class GameSocketHandler extends TextWebSocketHandler {
             Message message = new Message();
             message.setAuthor(userName);
             message.setText(userName + " connected!");
-            broadCast(message);
+            broadCast(message, session.getId());
         }
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         sessions.remove(session);
         Message message = new Message();
         String disconnectedUser = users.get(session.getId());
         message.setAuthor(disconnectedUser);
         message.setText(disconnectedUser + " disconnected!");
-        broadCast(message);
+        broadCast(message, session.getId());
     }
 
-    private void broadCast(Message message) {
-        List<String> playersInSaneGameAsAuthor = gameManager.getPlayersSessionsIdByPlayerInGameSessionId(users.get(message.getAuthor()));
+    private void broadCast(Message message, String senderSessionId) {
+        List<String> playersInSaneGameAsAuthor = gameManager.getPlayersSessionsIdByPlayerInGameSessionId(senderSessionId);
         sessions.stream()
-                .filter(playersInSaneGameAsAuthor::contains)
+                .filter(session -> playersInSaneGameAsAuthor.contains(session.getId()))
                 .forEach(webSocketSession -> {
                     try {
                         webSocketSession.sendMessage(new TextMessage(mapper.writeValueAsString(message)));
