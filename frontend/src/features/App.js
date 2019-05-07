@@ -5,6 +5,7 @@ import { AnimatedSwitch } from 'react-router-transition';
 
 import InitPlayer from './Init/InitPlayer';
 import GameMode from './Init/GameMode';
+import Invite from './Init/Invite';
 import Game from './Game/Game';
 
 import './App.css';
@@ -20,6 +21,7 @@ class App extends Component {
       >
         <Route exact path='/' component={InitPlayer} />
         <Route path='/mode' component={GameMode} />
+        <Route path='/invite' component={Invite} />
         <Route path='/game' component={Game} />
         <Route path='/game/:gameUUID' component={() => <p>test</p>} />
         <Route render={() => <p>Not Found</p>} />

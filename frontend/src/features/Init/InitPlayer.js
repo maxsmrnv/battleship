@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
-import { observable, computed, autorun, action } from 'mobx';
+import { observable } from 'mobx';
 
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
