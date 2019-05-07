@@ -41,6 +41,7 @@ export default class Chat extends Component {
 
   componentDidMount() {
     const { chatStore, playerStore, battleStore } = this.props;
+    console.log('AAAAAAAA', battleStore.gameUUID)
     chatStore.createConnection(battleStore.gameUUID, playerStore.name);
   }
 
@@ -50,8 +51,12 @@ export default class Chat extends Component {
   }
 
   submitHandler = e => {
+
     e.preventDefault();
-    const { chatStore } = this.props;
+
+    const { chatStore,battleStore } = this.props;
+    console.log('AAAAAAAA', battleStore.gameUUID)
+
     if (this.newMessage.length > 0) {
       chatStore.sendMessage(this.newMessage);
       this.newMessage = '';
