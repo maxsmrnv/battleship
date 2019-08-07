@@ -1,5 +1,5 @@
 import React from 'react';
-import { DragSource } from 'react-dnd';
+import { useDrag } from 'react-dnd';
 
 import styled from 'styled-components';
 
@@ -13,17 +13,16 @@ const StyledShip = styled.div`
   height: ${props => 50 * props.height}px;
 `;
 
-const Ship = ({
-  hideSourceOnDrag,
-  left,
-  top,
-  width,
-  height,
-  connectDragSource,
-  isDragging
-}) => {
+const Ship = ({ id, hideSourceOnDrag, left, top, width, height }) => {
+  const [{ isDragging }, drag] = useDrag({
+    item: { id, left, top, width, height, type: 'ship' },
+    collect: monitor => ({
+      isDragging: monitor.isDragging()
+    })
+  });
+
   if (isDragging && hideSourceOnDrag) {
-    return null;
+    return <StyledShip ref={drag} />;
   }
   return (
     <StyledShip
@@ -31,23 +30,9 @@ const Ship = ({
       top={top}
       width={width}
       height={height}
-      ref={ship => connectDragSource(ship)}
+      ref={drag}
     />
   );
 };
-export default DragSource(
-  'ship',
-  {
-    beginDrag(props) {
-      const { id, left, top, width, height } = props;
-      return { id, left, top, width, height };
-    },
-    endDrag(props) {
-      console.log('kek', props);
-    }
-  },
-  (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  })
-)(Ship);
+
+export default Ship;
