@@ -13,13 +13,18 @@ const StyledShip = styled.div`
   height: ${props => 50 * props.height}px;
 `;
 
-const Ship = ({ id, hideSourceOnDrag, left, top, width, height }) => {
+const Ship = ({ id, hideSourceOnDrag, left, top, width, height, rotate }) => {
   const [{ isDragging }, drag] = useDrag({
     item: { id, left, top, width, height, type: 'ship' },
     collect: monitor => ({
       isDragging: monitor.isDragging()
     })
   });
+
+  const handleRotate = e => {
+    e.preventDefault();
+    rotate(id);
+  };
 
   if (isDragging && hideSourceOnDrag) {
     return <StyledShip ref={drag} />;
@@ -31,6 +36,7 @@ const Ship = ({ id, hideSourceOnDrag, left, top, width, height }) => {
       width={width}
       height={height}
       ref={drag}
+      onClick={handleRotate}
     />
   );
 };

@@ -14,12 +14,12 @@ const Area = () => {
     // submarine1: { top: 0, left: 150, width: '1', height: '1' },
     // submarine2: { top: 0, left: 250, width: '1', height: '1' },
     // submarine3: { top: 100, left: 100, width: '1', height: '1' },
-    destroyer0: { top: 200, left: 50, width: '2', height: '1' }
+    // destroyer0: { top: 200, left: 50, width: '2', height: '1' }
     // destroyer1: { top: 200, left: 50, width: '2', height: '1' },
     // destroyer2: { top: 200, left: 50, width: '2', height: '1' },
     // cruiser0: { top: 250, left: 200, width: '1', height: '3' },
-    // cruiser1: { top: 250, left: 200, width: '1', height: '3' },
-    // battleship: { top: 250, left: 200, width: '4', height: '1' }
+    cruiser1: { top: 0, left: 0, width: '1', height: '3' },
+    battleship: { top: 250, left: 200, width: '4', height: '1' }
   };
 
   const [ships, setShips] = useState(initShips);
@@ -44,8 +44,58 @@ const Area = () => {
     Math.round(y / 50) * 50
   ];
 
+  const intersectRect = (r1, r2) => {
+    return !(
+      r2.left >= r1.right ||
+      r2.right <= r1.left ||
+      r2.top >= r1.bottom ||
+      r2.bottom <= r1.top
+    );
+  };
+
   const [, drop] = useDrop({
     accept: 'ship',
+    canDrop: (item, monitor) => {
+      const delta = monitor.getDifferenceFromInitialOffset();
+      const left = Math.round(item.left + delta.x);
+      const top = Math.round(item.top + delta.y);
+      const [newLeft, newTop] = alignTargetByGrid(left, top);
+      const areaConflictsIsExist = (val, factor) => {
+        return val + factor * 50 > 500 || val < 0;
+      };
+      const shipsIntersect = Object.keys(ships)
+        .map(key => {
+          if (item.id !== key) {
+            const { left, top, width, height } = ships[key];
+            return {
+              left,
+              top,
+              right: left + width * 50,
+              bottom: top + height * 50
+            };
+          }
+          return null;
+        })
+        .filter(el => el)
+        .reduce((acc, next) => {
+          const res = intersectRect(
+            {
+              left: newLeft - 50,
+              top: newTop - 50,
+              right: left + item.width * 50 + 50,
+              bottom: top + item.height * 50 + 50
+            },
+            next
+          );
+          return acc || res;
+        }, false);
+
+      return !(
+        areaConflictsIsExist(newLeft, item.width) ||
+        areaConflictsIsExist(newTop, item.height) ||
+        shipsIntersect
+      );
+    },
     drop(item, monitor) {
       const delta = monitor.getDifferenceFromInitialOffset();
       const left = Math.round(item.left + delta.x);
@@ -55,6 +105,20 @@ const Area = () => {
       return undefined;
     }
   });
+
+  const rotate = id => {
+    const { width, height } = ships[id];
+    setShips(ships => {
+      return {
+        ...ships,
+        [id]: {
+          ...ships[id],
+          width: height,
+          height: width
+        }
+      };
+    });
+  };
 
   const moveBox = (id, left, top) => {
     setShips(ships => {
@@ -87,6 +151,7 @@ const Area = () => {
               width={width}
               height={height}
               hideSourceOnDrag={true}
+              rotate={rotate}
             />
           );
         })}
