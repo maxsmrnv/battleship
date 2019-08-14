@@ -10,15 +10,15 @@ const styles = {
 };
 const Area = () => {
   const initShips = {
-    // submarine0: { top: 0, left: 0, width: '1', height: '1' }
-    // submarine1: { top: 0, left: 150, width: '1', height: '1' },
-    // submarine2: { top: 0, left: 250, width: '1', height: '1' },
-    // submarine3: { top: 100, left: 100, width: '1', height: '1' },
-    // destroyer0: { top: 200, left: 50, width: '2', height: '1' }
-    // destroyer1: { top: 200, left: 50, width: '2', height: '1' },
-    // destroyer2: { top: 200, left: 50, width: '2', height: '1' },
-    // cruiser0: { top: 250, left: 200, width: '1', height: '3' },
-    cruiser1: { top: 0, left: 0, width: '1', height: '3' },
+    submarine0: { top: 50, left: 0, width: '1', height: '1' },
+    submarine1: { top: 400, left: 300, width: '1', height: '1' },
+    submarine2: { top: 50, left: 250, width: '1', height: '1' },
+    submarine3: { top: 150, left: 100, width: '1', height: '1' },
+    destroyer0: { top: 0, left: 400, width: '1', height: '2' },
+    destroyer1: { top: 450, left: 50, width: '2', height: '1' },
+    destroyer2: { top: 150, left: 350, width: '2', height: '1' },
+    cruiser0: { top: 300, left: 450, width: '1', height: '3' },
+    cruiser1: { top: 200, left: 0, width: '1', height: '3' },
     battleship: { top: 250, left: 200, width: '4', height: '1' }
   };
 
@@ -53,6 +53,35 @@ const Area = () => {
     );
   };
 
+  const shipsIntersect = ({ id, left, top, width, height }) =>
+    Object.keys(ships)
+      .filter(key => id !== key)
+      .map(key => {
+        const { left, top, width, height } = ships[key];
+        return {
+          left,
+          top,
+          right: left + width * 50,
+          bottom: top + height * 50
+        };
+      })
+      .reduce((acc, next) => {
+        const res = intersectRect(
+          {
+            left: left - 50,
+            top: top - 50,
+            right: left + width * 50 + 50,
+            bottom: top + height * 50 + 50
+          },
+          next
+        );
+        return acc || res;
+      }, false);
+
+  const areaConflictsIsExist = (val, factor) => {
+    return val + factor * 50 > 500 || val < 0;
+  };
+
   const [, drop] = useDrop({
     accept: 'ship',
     canDrop: (item, monitor) => {
@@ -60,40 +89,17 @@ const Area = () => {
       const left = Math.round(item.left + delta.x);
       const top = Math.round(item.top + delta.y);
       const [newLeft, newTop] = alignTargetByGrid(left, top);
-      const areaConflictsIsExist = (val, factor) => {
-        return val + factor * 50 > 500 || val < 0;
-      };
-      const shipsIntersect = Object.keys(ships)
-        .map(key => {
-          if (item.id !== key) {
-            const { left, top, width, height } = ships[key];
-            return {
-              left,
-              top,
-              right: left + width * 50,
-              bottom: top + height * 50
-            };
-          }
-          return null;
-        })
-        .filter(el => el)
-        .reduce((acc, next) => {
-          const res = intersectRect(
-            {
-              left: newLeft - 50,
-              top: newTop - 50,
-              right: left + item.width * 50 + 50,
-              bottom: top + item.height * 50 + 50
-            },
-            next
-          );
-          return acc || res;
-        }, false);
 
       return !(
         areaConflictsIsExist(newLeft, item.width) ||
         areaConflictsIsExist(newTop, item.height) ||
-        shipsIntersect
+        shipsIntersect({
+          id: item.id,
+          left: newLeft,
+          top: newTop,
+          width: item.width,
+          height: item.height
+        })
       );
     },
     drop(item, monitor) {
@@ -108,16 +114,19 @@ const Area = () => {
 
   const rotate = id => {
     const { width, height } = ships[id];
-    setShips(ships => {
-      return {
-        ...ships,
-        [id]: {
-          ...ships[id],
-          width: height,
-          height: width
-        }
-      };
-    });
+    !shipsIntersect({ ...ships[id], width: height, height: width, id }) &&
+      !areaConflictsIsExist(ships[id].top, width) &&
+      !areaConflictsIsExist(ships[id].left, height) &&
+      setShips(ships => {
+        return {
+          ...ships,
+          [id]: {
+            ...ships[id],
+            width: height,
+            height: width
+          }
+        };
+      });
   };
 
   const moveBox = (id, left, top) => {
