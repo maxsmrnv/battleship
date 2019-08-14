@@ -114,9 +114,11 @@ const Area = () => {
 
   const rotate = id => {
     const { width, height } = ships[id];
-    !shipsIntersect({ ...ships[id], width: height, height: width, id }) &&
+    if (
+      !shipsIntersect({ ...ships[id], width: height, height: width, id }) &&
       !areaConflictsIsExist(ships[id].top, width) &&
-      !areaConflictsIsExist(ships[id].left, height) &&
+      !areaConflictsIsExist(ships[id].left, height)
+    ) {
       setShips(ships => {
         return {
           ...ships,
@@ -127,6 +129,17 @@ const Area = () => {
           }
         };
       });
+    } else {
+      setShips(ships => {
+        return {
+          ...ships,
+          [id]: {
+            ...ships[id],
+            needShake: true
+          }
+        };
+      });
+    }
   };
 
   const moveBox = (id, left, top) => {
@@ -138,6 +151,7 @@ const Area = () => {
     });
   };
 
+  console.log(ships);
   return (
     <div ref={drop} style={styles}>
       <div
@@ -150,9 +164,10 @@ const Area = () => {
       >
         {[...Array(100).keys()].map(index => renderSquare(index))}
         {Object.keys(ships).map(key => {
-          const { left, top, width, height } = ships[key];
+          const { left, top, width, height, needShake } = ships[key];
           return (
             <Ship
+              needShake={needShake}
               key={key}
               id={key}
               left={left}
