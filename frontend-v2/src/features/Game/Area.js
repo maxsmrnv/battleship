@@ -112,6 +112,17 @@ const Area = () => {
     }
   });
 
+  const changeShakeState = id =>
+    setShips(ships => {
+      return {
+        ...ships,
+        [id]: {
+          ...ships[id],
+          needShake: !ships[id].needShake
+        }
+      };
+    });
+
   const rotate = id => {
     const { width, height } = ships[id];
     if (
@@ -130,15 +141,8 @@ const Area = () => {
         };
       });
     } else {
-      setShips(ships => {
-        return {
-          ...ships,
-          [id]: {
-            ...ships[id],
-            needShake: true
-          }
-        };
-      });
+      changeShakeState(id);
+      setTimeout(() => changeShakeState(id), 500);
     }
   };
 
@@ -151,7 +155,6 @@ const Area = () => {
     });
   };
 
-  console.log(ships);
   return (
     <div ref={drop} style={styles}>
       <div
