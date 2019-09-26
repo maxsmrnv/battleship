@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.4.3",
-    "@babel/plugin-proposal-decorators": "^7.4.4",
+    "@babel/plugin-proposal-decorators": "^7.6.0",
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
@@ -52,6 +52,7 @@
     "react-dnd-html5-backend": "^9.3.4",
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.12.10",
+    "react-router-dom": "^5.1.0",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "semver": "6.0.0",
@@ -133,6 +134,15 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ]
     ]
-  }
+  },
+  "devDependencies": {}
 }
