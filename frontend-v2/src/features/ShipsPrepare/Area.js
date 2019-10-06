@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDrop } from 'react-dnd';
+import { useStores } from '../../utils';
+import { observer } from 'mobx-react';
+
 import Ship from './Ship';
 
 const styles = {
@@ -8,21 +11,17 @@ const styles = {
   border: '1px solid grey',
   position: 'relative'
 };
-const Area = () => {
-  const initShips = {
-    submarine0: { top: 50, left: 0, width: '1', height: '1' },
-    submarine1: { top: 400, left: 300, width: '1', height: '1' },
-    submarine2: { top: 50, left: 250, width: '1', height: '1' },
-    submarine3: { top: 150, left: 100, width: '1', height: '1' },
-    destroyer0: { top: 0, left: 400, width: '1', height: '2' },
-    destroyer1: { top: 450, left: 50, width: '2', height: '1' },
-    destroyer2: { top: 150, left: 350, width: '2', height: '1' },
-    cruiser0: { top: 300, left: 450, width: '1', height: '3' },
-    cruiser1: { top: 200, left: 0, width: '1', height: '3' },
-    battleship: { top: 250, left: 200, width: '4', height: '1' }
-  };
 
-  const [ships, setShips] = useState(initShips);
+const Area = observer(() => {
+  const {
+    shipsStore: {
+      shipsPosition,
+      translateToGameView,
+      changeShakeState,
+      moveShip,
+      rotateShip
+    }
+  } = useStores();
 
   const renderSquare = i => {
     return (
@@ -54,10 +53,10 @@ const Area = () => {
   };
 
   const shipsIntersect = ({ id, left, top, width, height }) =>
-    Object.keys(ships)
+    Object.keys(shipsPosition)
       .filter(key => id !== key)
       .map(key => {
-        const { left, top, width, height } = ships[key];
+        const { left, top, width, height } = shipsPosition[key];
         return {
           left,
           top,
@@ -107,52 +106,28 @@ const Area = () => {
       const left = Math.round(item.left + delta.x);
       const top = Math.round(item.top + delta.y);
       const [x, y] = alignTargetByGrid(left, top);
-      moveBox(item.id, x, y);
+      moveShip(item.id, x, y);
       return undefined;
     }
   });
 
-  const changeShakeState = id =>
-    setShips(ships => {
-      return {
-        ...ships,
-        [id]: {
-          ...ships[id],
-          needShake: !ships[id].needShake
-        }
-      };
-    });
-
   const rotate = id => {
-    const { width, height } = ships[id];
+    const { width, height } = shipsPosition[id];
     if (
-      !shipsIntersect({ ...ships[id], width: height, height: width, id }) &&
-      !areaConflictsIsExist(ships[id].top, width) &&
-      !areaConflictsIsExist(ships[id].left, height)
+      !shipsIntersect({
+        ...shipsPosition[id],
+        width: height,
+        height: width,
+        id
+      }) &&
+      !areaConflictsIsExist(shipsPosition[id].top, width) &&
+      !areaConflictsIsExist(shipsPosition[id].left, height)
     ) {
-      setShips(ships => {
-        return {
-          ...ships,
-          [id]: {
-            ...ships[id],
-            width: height,
-            height: width
-          }
-        };
-      });
+      rotateShip(id, height, width);
     } else {
       changeShakeState(id);
       setTimeout(() => changeShakeState(id), 500);
     }
-  };
-
-  const moveBox = (id, left, top) => {
-    setShips(ships => {
-      return {
-        ...ships,
-        [id]: { ...ships[id], left, top }
-      };
-    });
   };
 
   return (
@@ -166,8 +141,8 @@ const Area = () => {
         }}
       >
         {[...Array(100).keys()].map(index => renderSquare(index))}
-        {Object.keys(ships).map(key => {
-          const { left, top, width, height, needShake } = ships[key];
+        {Object.keys(shipsPosition).map(key => {
+          const { left, top, width, height, needShake } = shipsPosition[key];
           return (
             <Ship
               needShake={needShake}
@@ -185,6 +160,6 @@ const Area = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Area;
