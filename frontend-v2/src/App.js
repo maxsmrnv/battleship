@@ -3,7 +3,7 @@ import { Provider } from 'mobx-react';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import { hot } from 'react-hot-loader/root';
 
-import { BattleArea } from './features/Game/BattleArea';
+import { BattleArea } from './features/ShipsPrepare';
 import { InitPlayer } from './features/InitGame';
 import { rootStore } from './rootStore';
 
