@@ -3,10 +3,11 @@ frontend/node_modules
 frontend/dist
 frontend/chatStubServer/node_modules
 
-backend/.idea
 backend/.gradle
 backend/bin
 backend/build
 backend/.project
 backend/.settings
 backend/.classpath
+backend/out
+backend/.idea
