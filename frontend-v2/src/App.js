@@ -1,7 +1,6 @@
 import React from 'react';
 import { Provider } from 'mobx-react';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
-import { hot } from 'react-hot-loader/root';
 
 import { BattleArea } from './features/ShipsPrepare';
 import { InitPlayer } from './features/InitGame';
@@ -12,8 +11,8 @@ const App = () => {
     <Provider {...rootStore}>
       <BrowserRouter basename={'/'}>
         <Switch>
-          <Route exact path="/" component={InitPlayer} />
-          <Route path="/battle" component={BattleArea} />
+          <Route exact path='/' component={InitPlayer} />
+          <Route path='/game' component={BattleArea} />
           <Route render={() => <p>Not Found</p>} />
         </Switch>
       </BrowserRouter>
@@ -21,4 +20,4 @@ const App = () => {
   );
 };
 
-export default hot(App);
+export default App;
