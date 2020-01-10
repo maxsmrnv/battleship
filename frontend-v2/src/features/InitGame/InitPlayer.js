@@ -13,7 +13,7 @@ export const InitPlayer = observer(({ history }) => {
 
   const submitHandler = e => {
     e.preventDefault();
-    history.push('/battle');
+    history.push('/game');
   };
 
   const inputHandler = e => {
@@ -27,10 +27,12 @@ export const InitPlayer = observer(({ history }) => {
           <Input
             onChange={inputHandler}
             value={playerName}
-            placeholder="Write your nickname..."
-            error="Please, fill up the form"
+            placeholder='Write your nickname...'
+            error='Please, fill up the form'
           />
-          <Button primary>Let's next</Button>
+          <Button disabled={!playerName.length} primary>
+            Let's next
+          </Button>
         </Wrapper>
       </form>
     </>

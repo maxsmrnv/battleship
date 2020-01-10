@@ -51,7 +51,7 @@ class ShipsStore {
   };
 
   @computed
-  get translateToGameView() {
+  get transformToGameView() {
     return Object.keys(this.shipsPosition).reduce((acc, next) => {
       const ship = this.shipsPosition[next];
 

@@ -14,13 +14,7 @@ const styles = {
 
 const Area = observer(() => {
   const {
-    shipsStore: {
-      shipsPosition,
-      translateToGameView,
-      changeShakeState,
-      moveShip,
-      rotateShip
-    }
+    shipsStore: { shipsPosition, changeShakeState, moveShip, rotateShip }
   } = useStores();
 
   const renderSquare = i => {
