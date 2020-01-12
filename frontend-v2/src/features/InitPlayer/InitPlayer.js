@@ -13,7 +13,7 @@ export const InitPlayer = observer(({ history }) => {
 
   const submitHandler = e => {
     e.preventDefault();
-    history.push('/game');
+    history.push('/initgame');
   };
 
   const inputHandler = e => {

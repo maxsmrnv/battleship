@@ -12,7 +12,7 @@ const styles = {
   position: 'relative'
 };
 
-const Area = observer(() => {
+const BattleArea = observer(() => {
   const {
     shipsStore: { shipsPosition, changeShakeState, moveShip, rotateShip }
   } = useStores();
@@ -156,4 +156,4 @@ const Area = observer(() => {
   );
 });
 
-export default Area;
+export default BattleArea;

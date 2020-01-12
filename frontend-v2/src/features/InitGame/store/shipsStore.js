@@ -67,9 +67,9 @@ class ShipsStore {
           .fill()
           .map((_, i) => start + i * 10);
 
-      const indexRange = +ship.width > 1 ? widthRange() : heightRange();
+      const shipIndexes = +ship.width > 1 ? widthRange() : heightRange();
 
-      return [...acc, ...indexRange];
+      return [...acc, shipIndexes];
     }, []);
   }
 }
