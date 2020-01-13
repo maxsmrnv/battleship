@@ -8,5 +8,9 @@
   },
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "uuid": "^3.3.3",
+    "ws": "^7.2.1"
+  }
 }
