@@ -4,7 +4,7 @@ export default class Player {
     this.ships = ships;
   }
 
-  shoot(coordinates) {
+  shot(coordinates) {
     let damagedShip = this.ships.filter(
       ship => ship.liveDecs.indexOf(coordinates) > -1
     );
@@ -13,9 +13,17 @@ export default class Player {
         liveDec => liveDec !== coordinates
       );
       damagedShip[0].damagedDecs.push(coordinates);
-      return damagedShip[0].liveDecs.length ? 'damage' : 'kill';
+      return damagedShip[0].liveDecs.length ? 'hit' : 'crushed';
     } else {
       return 'miss';
     }
+  }
+
+  hasLiveShips() {
+    return (
+      this.ships.filter(s => {
+        return s.liveDecs.length;
+      }).length !== 0
+    );
   }
 }

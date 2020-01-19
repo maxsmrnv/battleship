@@ -4,10 +4,10 @@ import Player from './player.js';
 import WebSocketServer from 'ws';
 import v4 from 'uuid';
 
-let players = {};
+const players = {};
 let game = null;
 
-let wsServer = new WebSocketServer.Server({
+const wsServer = new WebSocketServer.Server({
   port: 8081
 });
 wsServer.on('connection', ws => {
@@ -17,21 +17,49 @@ wsServer.on('connection', ws => {
     player: null
   };
   ws.onmessage = message => {
-    let data = JSON.parse(message.data);
-    if (data['ships']) {
-      let player = new Player(data.ships.map(ship => new Ship(ship)));
+    const data = JSON.parse(message.data);
+    if (data.ships) {
+      const player = new Player(data.ships.map(ship => new Ship(ship)));
       players[ws.id].player = player;
-      if (Object.keys(players).length == 2) {
-        game = new Game(
-          players[Object.keys(players)[0]].player,
-          players[Object.keys(players)[1]].player
-        );
-      }
-    } else if (data['shoot']) {
-      game.shoot({
-        movieOvner: players[ws.id].player,
-        coordinates: data.shoot.coordinates
+      player.id = ws.id;
+      joinWaitingRoom();
+    } else if (typeof data.shot !== 'undefined') {
+      const movieResult = game.shot({
+        movieOwner: players[ws.id].player,
+        coordinates: data.shot
       });
+
+      sendGameStateById(game.movieOwner.id, movieResult);
+      sendGameStateById(game.waitedPlayer.id, movieResult);
     }
   };
 });
+
+function sendGameStateById(id, movieResult) {
+  const { player, socket } = players[id];
+  socket.send(
+    JSON.stringify({
+      state: {
+        movieOwner: game.movieOwner.id === id ? 'you' : 'opponent',
+        ships: player.ships,
+        enemyFiled: player.enemyField,
+        enemyShots: player.enemyShots,
+        movieResult: movieResult,
+        gameStatus: game.status
+      }
+    })
+  );
+}
+
+function joinWaitingRoom() {
+  const joinedPlayers = Object.keys(players)
+    .map(id => {
+      return players[id];
+    })
+    .filter(p => p.player !== null);
+  if (joinedPlayers.length === 2) {
+    game = new Game(joinedPlayers[0].player, joinedPlayers[1].player);
+    sendGameStateById(game.movieOwner.id);
+    sendGameStateById(game.waitedPlayer.id);
+  }
+}
