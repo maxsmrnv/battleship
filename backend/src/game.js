@@ -9,11 +9,11 @@ export default class Game {
 
   shot({ coordinates, movieOwner }) {
     if (this.movieOwner !== movieOwner && this.status === 'inprogress') {
-      return;
+      return '';
     }
 
     const result = this.waitedPlayer.shot(coordinates);
-    movieOwner.enemyField[coordinates] = result === 'crushed' ? 'hit' : result;
+    this.movieOwner.enemyField[coordinates] = result === 'crushed' ? 'hit' : result;
     if (!this.waitedPlayer.hasLiveShips()) {
       this.status = 'gameover';
     } else if (result === 'miss') {
