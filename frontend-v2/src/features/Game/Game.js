@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
-import { useParams } from 'react-router';
+import { useParams, useLocation } from 'react-router';
 import styled from 'styled-components';
 import { useStores } from '../../utils';
+import { reaction } from 'mobx';
 
 export const Cell = styled.div`
   width: 50px;
@@ -72,27 +73,23 @@ const renderCell = (key, isShip = false, status) => (
 );
 
 export const Game = observer(() => {
-  const { gameUUID } = useParams();
-
   const {
-    battleStore: { createConnection, sendMessage },
+    battleStore: { createConnection, sendMessage, wsIsAvailable },
     shipsStore: { transformToGameView }
   } = useStores();
-
   useEffect(() => {
-    console.log('wtf');
     createConnection();
   });
 
-  // useEffect(() => {
-  //   try {
-  //     console.log('ws', ws.readyState);
-  //   } catch {}
-  //   // ws && sendMessage({ ships: transformToGameView });
-  // }, [ws]);
+  useEffect(() => {
+    console.log('inside autorun', wsIsAvailable);
+    console.log('wsIsAvailable', wsIsAvailable);
+    wsIsAvailable && sendMessage({ ships: transformToGameView });
+  }, [sendMessage, transformToGameView, wsIsAvailable]);
 
   const battleAtea = [...Array(100).keys()];
 
+  console.log('rerender');
   return (
     <Wrapper>
       <h3>enemy ships</h3>

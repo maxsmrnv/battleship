@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Provider } from 'mobx-react';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ const App = () => {
         <Switch>
           <Route exact path='/' component={InitPlayer} />
           <Route path='/initgame' component={InitGame} />
-          <Route exact path='/game/:gameUUID' component={Game} />
+          <Route exact path='/game' component={useMemo(() => Game, [])} />
           <Route render={() => <p>Not Found</p>} />
         </Switch>
       </BrowserRouter>

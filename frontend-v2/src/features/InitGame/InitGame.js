@@ -17,18 +17,9 @@ const StyledArea = styled.div`
 `;
 
 export const InitGame = observer(({ history }) => {
-  const {
-    battleStore: { gameIsLoading, startBattle, gameUUID },
-    shipsStore: { transformToGameView }
-  } = useStores();
-
   const submitHandler = e => {
     e.preventDefault();
-    history.push(`game/${123}`);
-    console.log('transformToGameView', transformToGameView);
-    // startBattle().then(() => {
-    //   gameUUID && history.push(`game/${gameUUID}`);
-    // });
+    history.push(`game`);
   };
 
   return (
@@ -37,7 +28,7 @@ export const InitGame = observer(({ history }) => {
         <StyledArea>
           <h3>drag to move / tap to rotate</h3>
           <BattleArea />
-          <Button disabled={gameIsLoading}>Start</Button>
+          <Button>Start</Button>
         </StyledArea>
       </form>
     </DndProvider>

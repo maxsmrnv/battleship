@@ -4,16 +4,22 @@ const URL = 'ws://localhost:8081';
 class BattleStore {
   @observable messages = [];
   @observable ws;
+  @observable wsIsAvailable = false;
 
   @action
   createConnection = () => {
-    console.log('here');
     const webSocketURL = `${URL}`;
+    console.log('connection...');
 
     this.ws = new WebSocket(webSocketURL);
     this.ws.onopen = () => {
+      setTimeout(() => {
+        console.log('connected');
+
+        this.wsIsAvailable = true;
+      }, 1000);
+
       // on connecting, do nothing but log it to the console
-      console.log('connected');
     };
 
     this.ws.onmessage = evt => {
@@ -30,6 +36,8 @@ class BattleStore {
     };
 
     this.ws.onclose = () => {
+      this.wsIsAvailable = false;
+
       console.log('disconnected');
       //      this.ws = new WebSocket(webSocketURL);
       // automatically try to reconnect on connection loss
@@ -38,7 +46,8 @@ class BattleStore {
 
   @action
   sendMessage = message => {
-    this.ws.send(message);
+    console.log('readyState', this.ws.readyState);
+    this.ws.readyState && this.ws.send(message);
   };
 }
 
