@@ -1,5 +1,6 @@
 import { playerStore } from './features/InitPlayer';
-import { shipsStore, battleStore } from './features/InitGame';
+import { shipsStore } from './features/InitGame';
+import { battleStore } from './features/Game';
 import { createBrowserHistory } from 'history';
 
 export const history = createBrowserHistory();
