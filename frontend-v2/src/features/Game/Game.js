@@ -11,32 +11,25 @@ export const Cell = styled.div`
   border-left: 1px solid black;
   border-top: 1px solid black;
   background-color: ${({ isShip }) => (isShip ? 'black' : 'white')};
+  cursor: pointer;
 `;
 
 const HitShot = styled.div`
-  width: ${50 * Math.sqrt(2)}px;
-  height: ${50 * Math.sqrt(2)}px;
-  position: relative;
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
+  cursor: not-allowed;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &::before {
-    border-right: 2px solid grey;
-    transform: rotate(45deg) translate(-50px, 0);
-  }
-  &::after {
-    border-bottom: 2px solid grey;
-    transform: rotate(45deg) translate(-15px, -35px);
+    content: 'X';
+    font-size: 60px;
+    font-family: sans-serif;
   }
 `;
 
 const MissShot = styled.div`
+  cursor: not-allowed;
   width: 50px;
   height: 50px;
   display: flex;
