@@ -9,7 +9,7 @@ export default class Game {
 
   shot({ coordinates, movieOwner }) {
     if (this.movieOwner !== movieOwner && this.status === 'inprogress') {
-      return;
+      return 'miss';
     }
 
     const result = this.waitedPlayer.shot(coordinates);

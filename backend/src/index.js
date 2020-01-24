@@ -28,9 +28,10 @@ wsServer.on('connection', (ws) => {
         movieOwner: players[ws.id].player,
         coordinates: data.shot,
       });
-
-      sendGameStateById(game.movieOwner.id, movieResult);
-      sendGameStateById(game.waitedPlayer.id, movieResult);
+      if (movieResult !== 'repeat') {
+        sendGameStateById(game.movieOwner.id, movieResult);
+        sendGameStateById(game.waitedPlayer.id, movieResult);
+      }
     }
   };
 });

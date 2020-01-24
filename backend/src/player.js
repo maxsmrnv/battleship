@@ -6,6 +6,9 @@ export default class Player {
   }
 
   shot(coordinates) {
+    if (this.enemyShots.filter((shot) => shot.coordinates === coordinates).length) {
+      return 'repeat';
+    }
     const damagedShip = this.ships.filter(
       (ship) => ship.liveDecs.indexOf(coordinates) > -1,
     );
