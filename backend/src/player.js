@@ -1,6 +1,7 @@
 export default class Player {
   constructor(ships) {
     this.enemyField = Array(100);
+    this.enemyShots = [];
     this.ships = ships;
   }
 
@@ -9,12 +10,14 @@ export default class Player {
       (ship) => ship.liveDecs.indexOf(coordinates) > -1,
     );
     if (damagedShip[0]) {
+      this.enemyShots.push({ coordinates, result: 'hit' });
       damagedShip[0].liveDecs = damagedShip[0].liveDecs.filter(
         (liveDec) => liveDec !== coordinates,
       );
       damagedShip[0].damagedDecs.push(coordinates);
       return damagedShip[0].liveDecs.length ? 'hit' : 'crushed';
     }
+    this.enemyShots.push({ coordinates, result: 'miss' });
     return 'miss';
   }
 

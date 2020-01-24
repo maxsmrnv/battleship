@@ -1,8 +1,8 @@
 import WebSocketServer from 'ws';
 import v4 from 'uuid';
-import Game from './game';
-import Ship from './ship';
-import Player from './player';
+import Game from './game.js';
+import Ship from './ship.js';
+import Player from './player.js';
 
 const players = {};
 let game = null;
@@ -41,9 +41,15 @@ function sendGameStateById(id, movieResult) {
     JSON.stringify({
       state: {
         movieOwner: game.movieOwner.id === id ? 'you' : 'opponent',
-        ships: player.ships,
+        ships: player.enemyShots.reduce((acc, next) => {
+          acc[next.coordinates] = next.result;
+          return acc;
+        }, player.ships.reduce((acc, next) => {
+          next.liveDecs.forEach((dec) => { acc[dec] = 'ship'; });
+          next.damagedDecs.forEach((dec) => { acc[dec] = 'hit'; });
+          return acc;
+        }, [...Array(100).keys()].map(() => null))),
         enemyFiled: player.enemyField,
-        enemyShots: player.enemyShots,
         movieResult,
         gameStatus: game.status,
       },
