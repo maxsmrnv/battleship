@@ -65,15 +65,17 @@ export const Area = styled.div`
   border-bottom: 1px solid black;
 `;
 
-const ScreenFilter = styled.div`
-  position: absolute;
+const Overlay = styled.div`
+  opacity: 0.3;
+  position: fixed; /* Sit on top of the page content */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: grey;
-  opacity: 0.5;
-  filter: alpha(opacity=10);
+  right: 0;
+  bottom: 0;
+  background-color: grey; /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other */
 `;
 
 export const Game = observer(() => {
@@ -125,7 +127,7 @@ export const Game = observer(() => {
       </Area>
       <h3>your ships</h3>
       <Area>{playerShips.map((ship, idx) => renderCell(idx, ship))}</Area>
-      {!yourMove && <ScreenFilter />}
+      {!yourMove && <Overlay />}
     </Wrapper>
   );
 });
