@@ -6,6 +6,10 @@ class BattleStore {
   @observable ws;
   @observable wsIsAvailable = false;
 
+  @observable enemyShips = [];
+  @observable playerShips = [];
+  @observable yourMove = false;
+
   @action
   createConnection = () => {
     const webSocketURL = `${URL}`;
@@ -13,41 +17,30 @@ class BattleStore {
 
     this.ws = new WebSocket(webSocketURL);
     this.ws.onopen = () => {
-      setTimeout(() => {
-        console.log('connected');
-
-        this.wsIsAvailable = true;
-      }, 1000);
-
-      // on connecting, do nothing but log it to the console
+      this.wsIsAvailable = true;
     };
 
     this.ws.onmessage = evt => {
-      // on receiving a message, add it to the list of messages
       const message = JSON.parse(evt.data);
-      console.log('message', message);
-      //      if (message.type === 'message') {
-      // this.messages.push({
-      //   name: message.author,
-      //   message: message.text
-      // });
-      //      }
+
+      this.enemyShips = message.state.enemyFiled;
+      this.playerShips = message.state.ships;
+      this.yourMove = message.state.movieOwner === 'you';
       console.log('new msg:', message);
     };
 
     this.ws.onclose = () => {
       this.wsIsAvailable = false;
-
       console.log('disconnected');
-      //      this.ws = new WebSocket(webSocketURL);
+
       // automatically try to reconnect on connection loss
+      this.ws = new WebSocket(webSocketURL);
     };
   };
 
   @action
   sendMessage = message => {
-    console.log('readyState', this.ws.readyState);
-    this.ws.readyState && this.ws.send(message);
+    this.ws.readyState && this.ws.send(JSON.stringify(message));
   };
 }
 

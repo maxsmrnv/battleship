@@ -5,7 +5,6 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 
 import { Button } from '../../components/Button';
-import { useStores } from '../../utils';
 import BattleArea from './BattleArea';
 
 const StyledArea = styled.div`

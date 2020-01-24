@@ -65,37 +65,67 @@ export const Area = styled.div`
   border-bottom: 1px solid black;
 `;
 
-const renderCell = (key, isShip = false, status) => (
-  <Cell key={key} isShip={isShip}>
-    {status === 'hit' && <HitShot />}
-    {status === 'miss' && <MissShot />}
-  </Cell>
-);
+const ScreenFilter = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: grey;
+  opacity: 0.5;
+  filter: alpha(opacity=10);
+`;
 
 export const Game = observer(() => {
   const {
-    battleStore: { createConnection, sendMessage, wsIsAvailable },
+    battleStore: {
+      createConnection,
+      sendMessage,
+      wsIsAvailable,
+      enemyShips,
+      playerShips,
+      yourMove
+    },
     shipsStore: { transformToGameView }
   } = useStores();
   useEffect(() => {
     createConnection();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    console.log('inside autorun', wsIsAvailable);
+    console.log('enemyShips', enemyShips);
+    console.log('playerShips', playerShips);
+  }, [enemyShips, playerShips]);
+
+  useEffect(() => {
     console.log('wsIsAvailable', wsIsAvailable);
     wsIsAvailable && sendMessage({ ships: transformToGameView });
   }, [sendMessage, transformToGameView, wsIsAvailable]);
 
-  const battleAtea = [...Array(100).keys()];
+  const handleShot = i => e => {
+    e.stopPropagation();
+    sendMessage({ shot: i });
+  };
 
-  console.log('rerender');
+  const renderCell = (i, ship, handler) => {
+    return (
+      <Cell key={i} isShip={ship === 'ship'} onClick={handler && handleShot(i)}>
+        {ship === 'hit' && <HitShot />}
+        {ship === 'miss' && <MissShot />}
+      </Cell>
+    );
+  };
+
   return (
     <Wrapper>
       <h3>enemy ships</h3>
-      <Area>{battleAtea.map(item => renderCell(item))}</Area>
+      <Area>
+        {enemyShips.map((ship, idx) => renderCell(idx, ship, handleShot))}
+      </Area>
       <h3>your ships</h3>
-      <Area>{battleAtea.map(item => renderCell(item))}</Area>
+      <Area>{playerShips.map((ship, idx) => renderCell(idx, ship))}</Area>
+      {!yourMove && <ScreenFilter />}
     </Wrapper>
   );
 });
