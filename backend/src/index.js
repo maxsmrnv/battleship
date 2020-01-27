@@ -24,11 +24,13 @@ wsServer.on('connection', (ws) => {
       player.id = ws.id;
       joinWaitingRoom();
     } else if (typeof data.shot !== 'undefined') {
-      const movieResult = game.shot({
+      const shot = {
         movieOwner: players[ws.id].player,
         coordinates: data.shot,
-      });
-      if (movieResult !== 'repeat') {
+      };
+
+      if (game.isValidShot(shot)) {
+        const movieResult = game.shot(shot);
         sendGameStateById(game.movieOwner.id, movieResult);
         sendGameStateById(game.waitedPlayer.id, movieResult);
       }

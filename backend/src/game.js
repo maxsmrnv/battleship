@@ -8,10 +8,6 @@ export default class Game {
   }
 
   shot({ coordinates, movieOwner }) {
-    if (this.movieOwner !== movieOwner && this.status === 'inprogress') {
-      return 'miss';
-    }
-
     const result = this.waitedPlayer.shot(coordinates);
     this.movieOwner.enemyField[coordinates] = result === 'crushed' ? 'hit' : result;
     if (!this.waitedPlayer.hasLiveShips()) {
@@ -21,5 +17,14 @@ export default class Game {
       this.waitedPlayer = movieOwner;
     }
     return result;
+  }
+
+  isValidShot({ coordinates, movieOwner }) {
+    if (this.movieOwner !== movieOwner
+       || this.status !== 'inprogress'
+        || this.waitedPlayer.enemyShots.filter((shot) => shot.coordinates === coordinates).length) {
+      return false;
+    }
+    return true;
   }
 }
