@@ -5,7 +5,7 @@ class PlayerStore {
   playerName = '';
 
   @action
-  setName = name => {
+  setName = (name) => {
     this.playerName = name;
   };
 }

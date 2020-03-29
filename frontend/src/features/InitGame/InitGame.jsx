@@ -5,7 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import styled from 'styled-components';
 
 import { Button } from '../../components/Button';
-import BattleArea from './BattleArea';
+import { BattleArea } from './BattleArea';
 
 const StyledArea = styled.div`
   display: grid;
@@ -16,9 +16,9 @@ const StyledArea = styled.div`
 `;
 
 export const InitGame = observer(({ history }) => {
-  const submitHandler = e => {
+  const submitHandler = (e) => {
     e.preventDefault();
-    history.push(`game`);
+    history.push('game');
   };
 
   return (
@@ -33,3 +33,5 @@ export const InitGame = observer(({ history }) => {
     </DndProvider>
   );
 });
+
+export default InitGame;

@@ -25,12 +25,12 @@ const StyledShip = styled.div`
   position: absolute;
   background-color: black;
   cursor: move;
-  left: ${props => props.left}px;
-  top: ${props => props.top}px;
-  width: ${props => 50 * props.width}px;
-  height: ${props => 50 * props.height}px;
+  left: ${(props) => props.left}px;
+  top: ${(props) => props.top}px;
+  width: ${(props) => 50 * props.width}px;
+  height: ${(props) => 50 * props.height}px;
 
-  animation: ${props => props.needShake && shake} 0.82s
+  animation: ${(props) => props.needShake && shake} 0.82s
     cubic-bezier(0.36, 0.07, 0.19, 0.97) both infinite;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
@@ -45,16 +45,23 @@ const Ship = ({
   width,
   height,
   rotate,
-  needShake
+  needShake,
 }) => {
   const [{ isDragging }, drag] = useDrag({
-    item: { id, left, top, width, height, type: 'ship' },
-    collect: monitor => ({
-      isDragging: monitor.isDragging()
-    })
+    item: {
+      id,
+      left,
+      top,
+      width,
+      height,
+      type: 'ship',
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
   });
 
-  const handleRotate = e => {
+  const handleRotate = (e) => {
     e.preventDefault();
     rotate(id);
   };

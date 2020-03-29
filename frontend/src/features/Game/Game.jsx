@@ -41,7 +41,6 @@ const MissShot = styled.div`
     background-color: black;
   }
 `;
-
 export const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -77,13 +76,12 @@ export const Game = observer(() => {
       wsIsAvailable,
       enemyShips,
       playerShips,
-      yourMove
+      yourMove,
     },
-    shipsStore: { transformToGameView }
+    shipsStore: { transformToGameView },
   } = useStores();
   useEffect(() => {
     createConnection();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -93,22 +91,22 @@ export const Game = observer(() => {
 
   useEffect(() => {
     console.log('wsIsAvailable', wsIsAvailable);
-    wsIsAvailable && sendMessage({ ships: transformToGameView });
+    if (wsIsAvailable) {
+      sendMessage({ ships: transformToGameView });
+    }
   }, [sendMessage, transformToGameView, wsIsAvailable]);
 
-  const handleShot = i => e => {
+  const handleShot = (i) => (e) => {
     e.stopPropagation();
     sendMessage({ shot: i });
   };
 
-  const renderCell = (i, ship, handler) => {
-    return (
-      <Cell key={i} isShip={ship === 'ship'} onClick={handler && handleShot(i)}>
-        {ship === 'hit' && <HitShot />}
-        {ship === 'miss' && <MissShot />}
-      </Cell>
-    );
-  };
+  const renderCell = (i, ship, handler) => (
+    <Cell key={i} isShip={ship === 'ship'} onClick={handler && handleShot(i)}>
+      {ship === 'hit' && <HitShot />}
+      {ship === 'miss' && <MissShot />}
+    </Cell>
+  );
 
   return (
     <Wrapper>

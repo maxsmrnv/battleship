@@ -3,11 +3,15 @@ import { observable, action } from 'mobx';
 const URL = 'ws://localhost:8081';
 class BattleStore {
   @observable messages = [];
+
   @observable ws;
+
   @observable wsIsAvailable = false;
 
   @observable enemyShips = [];
+
   @observable playerShips = [];
+
   @observable yourMove = false;
 
   @action
@@ -20,7 +24,7 @@ class BattleStore {
       this.wsIsAvailable = true;
     };
 
-    this.ws.onmessage = evt => {
+    this.ws.onmessage = (evt) => {
       const message = JSON.parse(evt.data);
 
       this.enemyShips = message.state.enemyFiled;
@@ -38,9 +42,10 @@ class BattleStore {
     };
   };
 
-  @action
-  sendMessage = message => {
-    this.ws.readyState && this.ws.send(JSON.stringify(message));
+  sendMessage = (message) => {
+    if (this.ws.readyState) {
+      this.ws.send(JSON.stringify(message));
+    }
   };
 }
 
