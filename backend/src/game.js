@@ -22,9 +22,29 @@ export default class Game {
   isValidShot({ coordinates, movieOwner }) {
     if (this.movieOwner !== movieOwner
        || this.status !== 'inprogress'
-        || this.waitedPlayer.getEnemyShots().filter((shot) => shot.coordinates === coordinates).length) {
+        || this.waitedPlayer.getEnemyShots().some((shot) => shot.coordinates === coordinates)) {
       return false;
     }
     return true;
+  }
+
+  getMovieOwner() {
+    return this.movieOwner;
+  }
+
+  getWaitedPlayer() {
+    return this.waitedPlayer;
+  }
+
+  getFirstPlayer() {
+    return this.firstPlayer;
+  }
+
+  getSecondPlayer() {
+    return this.secondPlayer;
+  }
+
+  getStatus() {
+    return this.status;
   }
 }
