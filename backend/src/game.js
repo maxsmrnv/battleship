@@ -9,7 +9,7 @@ export default class Game {
 
   shot({ coordinates, movieOwner }) {
     const result = this.waitedPlayer.shot(coordinates);
-    this.movieOwner.enemyField[coordinates] = result === 'crushed' ? 'hit' : result;
+    this.movieOwner.getEnemyField()[coordinates] = result === 'crushed' ? 'hit' : result;
     if (!this.waitedPlayer.hasLiveShips()) {
       this.status = 'gameover';
     } else if (result === 'miss') {
@@ -22,7 +22,7 @@ export default class Game {
   isValidShot({ coordinates, movieOwner }) {
     if (this.movieOwner !== movieOwner
        || this.status !== 'inprogress'
-        || this.waitedPlayer.enemyShots.filter((shot) => shot.coordinates === coordinates).length) {
+        || this.waitedPlayer.getEnemyShots().filter((shot) => shot.coordinates === coordinates).length) {
       return false;
     }
     return true;

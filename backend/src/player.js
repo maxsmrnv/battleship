@@ -6,25 +6,37 @@ export default class Player {
   }
 
   shot(coordinates) {
-    if (this.enemyShots.filter((shot) => shot.coordinates === coordinates).length) {
+    if (this.enemyShots.some((shot) => shot.coordinates === coordinates)) {
       return 'repeat';
     }
-    const damagedShip = this.ships.filter(
+    const damagedShip = this.ships.find(
       (ship) => ship.liveDecs.indexOf(coordinates) > -1,
     );
-    if (damagedShip[0]) {
+    if (damagedShip) {
       this.enemyShots.push({ coordinates, result: 'hit' });
-      damagedShip[0].liveDecs = damagedShip[0].liveDecs.filter(
+      damagedShip.liveDecs = damagedShip.liveDecs.filter(
         (liveDec) => liveDec !== coordinates,
       );
-      damagedShip[0].damagedDecs.push(coordinates);
-      return damagedShip[0].liveDecs.length ? 'hit' : 'crushed';
+      damagedShip.damagedDecs.push(coordinates);
+      return damagedShip.liveDecs.length ? 'hit' : 'crushed';
     }
     this.enemyShots.push({ coordinates, result: 'miss' });
     return 'miss';
   }
 
+  getEnemyField() {
+    return this.enemyField;
+  }
+
+  getEnemyShots() {
+    return this.enemyShots;
+  }
+
+  getShips() {
+    return this.ships;
+  }
+
   hasLiveShips() {
-    return this.ships.filter((s) => s.liveDecs.length).length !== 0;
+    return this.ships.some((s) => s.liveDecs.length > 0);
   }
 }
