@@ -66,8 +66,8 @@ class InitPlayer extends React.Component {
               ref={this.inputRef}
               onChange={this.inputHandler}
               value={this.playerName}
-              placeholder='Write your nickname...'
-              error='Please, fill up the form'
+              placeholder="Write your nickname..."
+              error="Please, fill up the form"
             />
             <Button primary>Let's next</Button>
           </Wrapper>
