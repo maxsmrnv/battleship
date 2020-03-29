@@ -2,7 +2,7 @@ import { observable, action } from 'mobx';
 import axios from 'axios';
 
 class battleStore {
-  @observable gameUUID;
+  @observable gameUUID = sessionStorage.getItem('gameUUID');
 
   @observable battleFlowStatus = 'pendingForPlayer'; // pendingForPlayer -> preparation -> battle -> results
 
@@ -12,12 +12,13 @@ class battleStore {
     this.shipsPosition = index;
   }
 
-  @action(name="start battle") async startBattle() {
+  @action((name = 'start battle')) async startBattle() {
     this.isFetching = true;
     this.error = null;
     try {
       const response = await axios.post('http://localhost:8080/game');
       this.gameUUID = response.data.id;
+      sessionStorage.setItem('gameUUID', this.gameUUID);
       this.isFetching = false;
     } catch (error) {
       this.error = error;
