@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { useStores } from '../../utils';
+import { useStores } from '_utils';
 
 export const Cell = styled.div`
   width: 50px;

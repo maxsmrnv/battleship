@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { observer } from 'mobx-react';
 
-import { useStores } from '~src/utils';
-import { Button } from '~src/components/Button';
-import { Input } from '~src/components/Input';
+import { Input } from '_components/Input';
+import { Button } from '_components/Button';
+import { useStores } from '_utils';
 import { Wrapper } from './style';
 
 export const InitPlayer = observer(({ history }) => {

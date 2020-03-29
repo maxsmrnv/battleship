@@ -29,6 +29,7 @@
     "lint": "eslint src/ --ext .js --ext .jsx --fix"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "history": "^4.10.1",
     "mobx": "^5.15.4",
     "mobx-react": "^6.1.8",
@@ -41,6 +42,7 @@
     "styled-components": "^5.0.1"
   },
   "alias": {
-    "~src": "./src"
+    "_components": "./src/components",
+    "_utils": "./src/utils.js"
   }
 }

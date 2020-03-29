@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
 import { observer } from 'mobx-react';
-import { useStores } from '../../utils';
+import { useStores } from '_utils';
 
 import Ship from './Ship';
 

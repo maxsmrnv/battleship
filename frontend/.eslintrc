@@ -20,7 +20,10 @@
   "settings": {
     "import/resolver": {
       "alias": {
-        "map": [["~src", "./src"]]
+        "map": [
+          ["_components", "./src/components"],
+          ["_utils", "./src/utils.js"]
+        ]
       }
     }
   }
