@@ -1,2 +1,2 @@
-export { InitPlayer } from './InitPlayer';
-export { playerStore } from './store/playerStore';
+export { InitGame } from './InitGame';
+export { shipsStore } from './store/shipsStore';
