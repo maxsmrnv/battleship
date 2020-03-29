@@ -1,108 +1,124 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import Chat from '../Chat/Chat';
-import { Button } from '../../components/Button';
-import Board from './BattlePreparation/Board';
-import { observer, inject } from 'mobx-react';
+import { useStores } from '../../utils';
 
-const Wrapper = styled.section`
+export const Cell = styled.div`
+  width: 50px;
+  height: 50px;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  background-color: ${({ isShip }) => (isShip ? 'black' : 'white')};
+  cursor: pointer;
+`;
+
+const HitShot = styled.div`
+  cursor: not-allowed;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &::before {
+    content: 'X';
+    font-size: 60px;
+    font-family: sans-serif;
+  }
+`;
+
+const MissShot = styled.div`
+  cursor: not-allowed;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &::before {
+    border-radius: 50%;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: black;
+  }
+`;
+
+export const Wrapper = styled.div`
   display: grid;
-  height: 100vh;
   grid-template-columns: 1fr;
-  grid-template-rows: 150px 2fr 1fr;
-  grid-row-gap: 20px;
-  .battle {
-    grid-area: battle;
-    display: grid;
-    grid-template-columns: auto auto;
-    justify-content: space-evenly;
-  }
-  .chat {
-    border-top: 1px solid black;
-    align-self: center;
-    grid-area: chat;
-  }
-  .header {
-    grid-area: header;
-    justify-self: end;
-    align-self: start;
-  }
-
-  grid-template-areas:
-    'header'
-    'battle'
-    'chat';
+  justify-items: center;
 `;
 
-const StyledExit = styled(Button)`
-  border: none;
-  text-decoration: underline;
+export const Area = styled.div`
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  width: fit-content;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
 `;
 
-///for dev only///for dev only///for dev only///for dev only///for dev only
-const StyledDebuger = styled(Button)`
-  border: 2px solid black;
-  color: black;
-  background-color: red;
+const Overlay = styled.div`
+  opacity: 0.3;
+  position: fixed; /* Sit on top of the page content */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: grey; /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other */
 `;
-function* screenSeqGen() {
-  let index = 0;
-  const steps = ['pendingForPlayer', 'preparation', 'battle', 'results'];
-  while (true) {
-    yield steps[index];
-    index = (index + 1) % steps.length;
-  }
-}
-const screenSeq = screenSeqGen();
-///for dev only///for dev only///for dev only///for dev only///for dev only
 
-@inject('battleStore')
-@observer
-class Game extends React.Component {
-  exitHandler = e => {
-    e.preventDefault();
-    this.props.history.push('/mode');
+export const Game = observer(() => {
+  const {
+    battleStore: {
+      createConnection,
+      sendMessage,
+      wsIsAvailable,
+      enemyShips,
+      playerShips,
+      yourMove
+    },
+    shipsStore: { transformToGameView }
+  } = useStores();
+  useEffect(() => {
+    createConnection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    console.log('enemyShips', enemyShips);
+    console.log('playerShips', playerShips);
+  }, [enemyShips, playerShips]);
+
+  useEffect(() => {
+    console.log('wsIsAvailable', wsIsAvailable);
+    wsIsAvailable && sendMessage({ ships: transformToGameView });
+  }, [sendMessage, transformToGameView, wsIsAvailable]);
+
+  const handleShot = i => e => {
+    e.stopPropagation();
+    sendMessage({ shot: i });
   };
 
-  moveFlowStatus = () => {
-    this.props.battleStore.battleFlowStatus = screenSeq.next().value;
-  };
-
-  renderBattleScreen = () => {
-    const { battleFlowStatus } = this.props.battleStore;
-    const screenFlowMap = {
-      pendingForPlayer: <h1>pending for player...</h1>,
-      preparation: (
-        <>
-          <Board />
-          <div style={{ display: 'grid', alignContent: 'center' }}>
-            <Button primary>Ready</Button>
-          </div>
-          <h1>Move your ship ...</h1>
-        </>
-      ),
-      battle: <h1>battle screen</h1>,
-      results: <h1>%usernam% WINS!</h1>
-    };
-    return screenFlowMap[battleFlowStatus];
-  };
-
-  render() {
+  const renderCell = (i, ship, handler) => {
     return (
-      <Wrapper>
-        <div className='header'>
-          <StyledExit onClick={this.exitHandler}>Exit game</StyledExit>
-          <StyledDebuger onClick={this.moveFlowStatus}>
-            next screen
-          </StyledDebuger>
-        </div>
-        <div className='battle'>{this.renderBattleScreen()}</div>
-        <div className='chat'>
-          <Chat />
-        </div>
-      </Wrapper>
+      <Cell key={i} isShip={ship === 'ship'} onClick={handler && handleShot(i)}>
+        {ship === 'hit' && <HitShot />}
+        {ship === 'miss' && <MissShot />}
+      </Cell>
     );
-  }
-}
+  };
 
-export default Game;
+  return (
+    <Wrapper>
+      <h3>enemy ships</h3>
+      <Area>
+        {enemyShips.map((ship, idx) => renderCell(idx, ship, handleShot))}
+      </Area>
+      <h3>your ships</h3>
+      <Area>{playerShips.map((ship, idx) => renderCell(idx, ship))}</Area>
+      {!yourMove && <Overlay />}
+    </Wrapper>
+  );
+});

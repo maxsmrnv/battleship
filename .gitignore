@@ -1,7 +1,8 @@
 .vscode
-frontend/node_modules
+
 frontend/dist
-frontend/chatStubServer/node_modules
+frontend/node_modules
+frontend/.cache
 
 backend/node_modules
 
