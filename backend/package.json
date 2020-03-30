@@ -15,9 +15,9 @@
     "uuid": "^3.3.3",
     "ws": "^7.2.1"
   },
+  "type": "module",
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
     "babel-jest": "^25.2.3",
     "eslint": "^6.8.0",

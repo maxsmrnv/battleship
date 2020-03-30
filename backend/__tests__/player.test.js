@@ -1,5 +1,5 @@
-import Player from '../src/player';
-import Ship from '../src/ship';
+import Player from '../src/player.js';
+import Ship from '../src/ship.js';
 
 let player;
 

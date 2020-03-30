@@ -1,6 +1,6 @@
-import Game from '../src/game';
-import Player from '../src/player';
-import Ship from '../src/ship';
+import Game from '../src/game.js';
+import Player from '../src/player.js';
+import Ship from '../src/ship.js';
 
 let game;
 

@@ -1,8 +1,8 @@
 import WebSocketServer from 'ws';
 import v4 from 'uuid';
-import Game from './game';
-import Ship from './ship';
-import Player from './player';
+import Game from './game.js';
+import Ship from './ship.js';
+import Player from './player.js';
 
 const players = {};
 let game = null;
