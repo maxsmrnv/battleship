@@ -2,20 +2,18 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import styled from 'styled-components';
 
 import { Button } from '_components/Button';
-import { BattleArea } from './BattleArea';
-
-const StyledArea = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 4fr 1fr;
-  justify-items: center;
-  align-items: center;
-`;
+import { Checkbox } from '_components/Checkbox';
+import { useStores } from '_utils';
+import { BattleArea } from './components/BattleArea';
+import { StyledArea } from './style';
 
 export const InitGame = observer(({ history }) => {
+  const {
+    shipsStore: { isPrivate, setIsPrivate },
+  } = useStores();
+
   const submitHandler = (e) => {
     e.preventDefault();
     history.push('game');
@@ -25,9 +23,14 @@ export const InitGame = observer(({ history }) => {
     <DndProvider backend={HTML5Backend}>
       <form onSubmit={submitHandler}>
         <StyledArea>
-          <h3>drag to move / tap to rotate</h3>
+          <h3>Drag to move / Tap to rotate</h3>
           <BattleArea />
           <Button>Start</Button>
+          <Checkbox
+            label="Private game"
+            isChecked={isPrivate}
+            onChange={setIsPrivate}
+          />
         </StyledArea>
       </form>
     </DndProvider>

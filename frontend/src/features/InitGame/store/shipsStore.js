@@ -65,6 +65,14 @@ class ShipsStore {
     },
   };
 
+  @observable
+  isPrivate = false;
+
+  @action
+  setIsPrivate = () => {
+    this.isPrivate = !this.isPrivate;
+  };
+
   @action
   setShipsPosition = (ships) => {
     this.shipsPosition = ships;

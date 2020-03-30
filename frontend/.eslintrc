@@ -15,7 +15,17 @@
     "prettier/prettier": ["error"],
     "react/prop-types": 0,
     "import/prefer-default-export": 0,
-    "react/jsx-props-no-spreading": 0
+    "react/jsx-props-no-spreading": 0,
+    "jsx-a11y/label-has-associated-control": [ "error", {
+      "required": {
+        "some": [ "nesting", "id"  ]
+      }
+    }],
+    "jsx-a11y/label-has-for": [ "error", {
+      "required": {
+        "some": [ "nesting", "id"  ]
+      }
+    }]
   },
   "settings": {
     "import/resolver": {
@@ -23,7 +33,8 @@
         "map": [
           ["_components", "./src/components"],
           ["_utils", "./src/utils.js"]
-        ]
+        ],
+        "extensions": [".js", ".jsx"]
       }
     }
   }

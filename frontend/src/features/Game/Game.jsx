@@ -22,7 +22,6 @@ const HitShot = styled.div`
   &::before {
     content: 'X';
     font-size: 60px;
-    font-family: sans-serif;
   }
 `;
 
