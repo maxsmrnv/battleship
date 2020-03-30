@@ -1,7 +1,9 @@
+.idea
+
 frontend/dist
 frontend/node_modules
 frontend/.cache
+frontend/.idea
+
 
 backend/node_modules
-frontend/.idea
-.idea
