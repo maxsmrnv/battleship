@@ -3,8 +3,8 @@ import { observer } from 'mobx-react';
 
 import { Input } from '_components/Input';
 import { Button } from '_components/Button';
-import { useStores } from '_utils';
 import { Wrapper } from './style';
+import { useStores } from '_utils';
 
 export const InitPlayer = observer(({ history }) => {
   const {
