@@ -1,4 +1,4 @@
-import Game from '../src/game.js';
+import Game from '../src/game/game.js';
 import Player from '../src/player.js';
 import Ship from '../src/ship.js';
 

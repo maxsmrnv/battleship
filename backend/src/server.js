@@ -1,6 +1,6 @@
 import WebSocketServer from 'ws';
 import v4 from 'uuid';
-import Game from './game.js';
+import Game from './game/game.js';
 import Ship from './ship.js';
 import Player from './player.js';
 
