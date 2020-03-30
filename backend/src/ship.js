@@ -3,4 +3,12 @@ export default class Ship {
     this.liveDecs = [...liveDecs];
     this.damagedDecs = [];
   }
+
+  getLiveDecs() {
+    return this.liveDecs;
+  }
+
+  getDamagedDecs() {
+    return this.damagedDecs;
+  }
 }
