@@ -1,10 +1,7 @@
 export default class Game {
-  constructor(firstPlayer, secondPlayer) {
-    this.firstPlayer = firstPlayer;
-    this.secondPlayer = secondPlayer;
-    this.movieOwner = firstPlayer;
-    this.waitedPlayer = secondPlayer;
-    this.status = 'inprogress';
+  constructor(id) {
+    this.id = id;
+    this.status = 'pending';
   }
 
   shot({ coordinates, movieOwner }) {
@@ -46,5 +43,18 @@ export default class Game {
 
   getStatus() {
     return this.status;
+  }
+
+  addPlayer(player) {
+    if (!this.firstPlayer) {
+      this.firstPlayer = player;
+      this.movieOwner = player;
+      return;
+    }
+    if (!this.secondPlayer) {
+      this.secondPlayer = player;
+      this.waitedPlayer = player;
+      this.status = 'inprogress';
+    }
   }
 }
