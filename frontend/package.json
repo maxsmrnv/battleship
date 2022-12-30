@@ -29,7 +29,7 @@
     "lint": "eslint src/ --ext .js --ext .jsx --fix"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "history": "^4.10.1",
     "mobx": "^5.15.4",
     "mobx-react": "^6.1.8",
